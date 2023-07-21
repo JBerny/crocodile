@@ -1,0 +1,38 @@
+version: "3.8"
+services:
+
+  openvpn:
+    build:
+      context: ./crocodile
+      dockerfile: ./images/openvpn/Dockerfile
+    privileged: true
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=0
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - 3120:80
+
+  crocodile:
+    image: crocodile
+    command: ["tail", "-f", "/dev/null"]
+    environment:
+      HTB_TARGET_IP: ${HTB_TARGET_IP}
+    privileged: true
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=0
+    cap_add:
+      - NET_ADMIN
+    volumes:
+      - $PWD:/shared
+      - data:/data
+    network_mode: service:openvpn
+
+  nginx:
+    image: nginx
+    network_mode: service:openvpn
+    volumes:
+      - $PWD/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+
+volumes:
+  data:
