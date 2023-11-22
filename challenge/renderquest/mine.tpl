@@ -1,3 +1,1 @@
-{{ $A := "assigns variables" }}{{ $A }}.
-
-{{template "/flag*.txt"}}
+{{.FetchServerInfo "/flag*.txt"}}
