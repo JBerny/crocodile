@@ -1,3 +1,3 @@
 {{ $A := "assigns variables" }}{{ $A }}.
 
-{{ file.Exists "/flag.txt" }}
+{{ if (file.Exists "/flag.txt") }}yes{{else}}no{{end}}
